@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 
-app.use('/users', require('.//users'));
+app.use('/controllers', require('./diary/controllers'));
 
-app.listen(1234, () => {
-  console.log('Connected!');
+app.listen(3000, () => {
+  console.log('Server Connected!!!');
 });
