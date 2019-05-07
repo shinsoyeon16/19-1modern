@@ -1,0 +1,9 @@
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\bin\Release\lesson0507-MultiThreadClient.exe.config
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\bin\Release\lesson0507-MultiThreadClient.exe
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\bin\Release\lesson0507-MultiThreadClient.pdb
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\obj\Release\lesson0507_MultiThreadClient.Form1.resources
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\obj\Release\lesson0507_MultiThreadClient.Properties.Resources.resources
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\obj\Release\lesson0507-MultiThreadClient.csproj.GenerateResource.cache
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\obj\Release\lesson0507-MultiThreadClient.csproj.CoreCompileInputs.cache
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\obj\Release\lesson0507-MultiThreadClient.exe
+C:\sy\19-1modern\lesson0507-MultiThreadClient\lesson0507-MultiThreadClient\obj\Release\lesson0507-MultiThreadClient.pdb

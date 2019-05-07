@@ -1,0 +1,14 @@
+C:\sy\19-1modern\lesson0507\lesson0507\bin\Debug\lesson0507.exe.config
+C:\sy\19-1modern\lesson0507\lesson0507\bin\Debug\lesson0507.exe
+C:\sy\19-1modern\lesson0507\lesson0507\bin\Debug\lesson0507.pdb
+C:\sy\19-1modern\lesson0507\lesson0507\obj\Debug\lesson0507.csprojAssemblyReference.cache
+C:\sy\19-1modern\lesson0507\lesson0507\obj\Debug\lesson0507.csproj.CoreCompileInputs.cache
+C:\sy\19-1modern\lesson0507\lesson0507\obj\Debug\lesson0507.exe
+C:\sy\19-1modern\lesson0507\lesson0507\obj\Debug\lesson0507.pdb
+C:\sy\19-1modern\lesson0507-Server\lesson0507\bin\Debug\lesson0507.exe.config
+C:\sy\19-1modern\lesson0507-Server\lesson0507\bin\Debug\lesson0507.exe
+C:\sy\19-1modern\lesson0507-Server\lesson0507\bin\Debug\lesson0507.pdb
+C:\sy\19-1modern\lesson0507-Server\lesson0507\obj\Debug\lesson0507.csprojAssemblyReference.cache
+C:\sy\19-1modern\lesson0507-Server\lesson0507\obj\Debug\lesson0507.csproj.CoreCompileInputs.cache
+C:\sy\19-1modern\lesson0507-Server\lesson0507\obj\Debug\lesson0507.exe
+C:\sy\19-1modern\lesson0507-Server\lesson0507\obj\Debug\lesson0507.pdb

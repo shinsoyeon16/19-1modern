@@ -1,0 +1,10 @@
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\bin\Debug\lesson0507-Client.exe.config
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\bin\Debug\lesson0507-Client.exe
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\bin\Debug\lesson0507-Client.pdb
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\obj\Debug\lesson0507-Client.csprojAssemblyReference.cache
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\obj\Debug\lesson0507_Client.Form1.resources
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\obj\Debug\lesson0507_Client.Properties.Resources.resources
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\obj\Debug\lesson0507-Client.csproj.GenerateResource.cache
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\obj\Debug\lesson0507-Client.csproj.CoreCompileInputs.cache
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\obj\Debug\lesson0507-Client.exe
+C:\sy\19-1modern\lesson0507-Client\lesson0507-Client\obj\Debug\lesson0507-Client.pdb
