@@ -1,0 +1,7 @@
+C:\dev\19-1modern\lesson0514-ChatServer\lesson0514-Chat Server\bin\Debug\lesson0514-Chat Server.exe.config
+C:\dev\19-1modern\lesson0514-ChatServer\lesson0514-Chat Server\bin\Debug\lesson0514-Chat Server.exe
+C:\dev\19-1modern\lesson0514-ChatServer\lesson0514-Chat Server\bin\Debug\lesson0514-Chat Server.pdb
+C:\dev\19-1modern\lesson0514-ChatServer\lesson0514-Chat Server\obj\Debug\lesson0514-Chat Server.csprojAssemblyReference.cache
+C:\dev\19-1modern\lesson0514-ChatServer\lesson0514-Chat Server\obj\Debug\lesson0514-Chat Server.csproj.CoreCompileInputs.cache
+C:\dev\19-1modern\lesson0514-ChatServer\lesson0514-Chat Server\obj\Debug\lesson0514-Chat Server.exe
+C:\dev\19-1modern\lesson0514-ChatServer\lesson0514-Chat Server\obj\Debug\lesson0514-Chat Server.pdb

@@ -12,7 +12,6 @@ namespace lesson0514_Chat_Server
     class Program
     {
         public static Hashtable clientsList = new Hashtable();
-
         static void Main(string[] args)
         {
             TcpListener serverSocket = new TcpListener(8888);
@@ -41,13 +40,8 @@ namespace lesson0514_Chat_Server
 
                 Console.WriteLine(dataFromClient + " Joined chat room ");
                 handleClinet client = new handleClinet();
-                client.startClient(clientSocket, dataFromClient, clientsList);
+                client.startClient(clientSocket, dataFromClient);
             }
-
-            clientSocket.Close();
-            serverSocket.Stop();
-            Console.WriteLine("exit");
-            Console.ReadLine();
         }
 
         public static void broadcast(string msg, string uName, bool flag)
@@ -79,15 +73,20 @@ namespace lesson0514_Chat_Server
     {
         TcpClient clientSocket;
         string clNo;
-        Hashtable clientsList;
 
-        public void startClient(TcpClient inClientSocket, string clineNo, Hashtable cList)
+        public void startClient(TcpClient inClientSocket, string clineNo)
         {
             this.clientSocket = inClientSocket;
             this.clNo = clineNo;
-            this.clientsList = cList;
             Thread ctThread = new Thread(doChat);
             ctThread.Start();
+        }
+        public void stopClient()
+        {
+            Program.clientsList.Remove(this.clNo);
+            Console.WriteLine(this.clNo + " Disconnected chat room");
+            Program.broadcast(this.clNo + "  Disconnected", "", false);
+            clientSocket.Close();
         }
             private void doChat()
         {
@@ -108,24 +107,20 @@ namespace lesson0514_Chat_Server
                     networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
                     dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
                     dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("$"));
-                    if (dataFromClient== "exit")
+                    if (dataFromClient != "exit")
                     {
-                        Console.WriteLine("From client - " + clNo + " Connect Close! ");
-                        Program.broadcast(dataFromClient + " Connect Close! ", dataFromClient, false);
-                        clientsList.Remove(dataFromClient);
-                        clientSocket.Close();
-                        
-                    } else {
                         Console.WriteLine("From client - " + clNo + " : " + dataFromClient);
                         rCount = Convert.ToString(requestCount);
-
-                        Program.broadcast(dataFromClient, clNo, true); }
+                        Program.broadcast(dataFromClient, clNo, true);
+                    }
+                    else  break;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
                 }
             }//end while
+            stopClient();
         }//end doChat
     } //end class handleClinet
-}
+}//end 넴스페슈

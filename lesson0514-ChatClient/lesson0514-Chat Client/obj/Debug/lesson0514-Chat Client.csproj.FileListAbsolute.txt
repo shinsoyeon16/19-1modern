@@ -1,0 +1,10 @@
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\bin\Debug\lesson0514-Chat Client.exe.config
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\bin\Debug\lesson0514-Chat Client.exe
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\bin\Debug\lesson0514-Chat Client.pdb
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\obj\Debug\lesson0514-Chat Client.csprojAssemblyReference.cache
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\obj\Debug\lesson0514_Chat_Client.Form1.resources
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\obj\Debug\lesson0514_Chat_Client.Properties.Resources.resources
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\obj\Debug\lesson0514-Chat Client.csproj.GenerateResource.cache
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\obj\Debug\lesson0514-Chat Client.csproj.CoreCompileInputs.cache
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\obj\Debug\lesson0514-Chat Client.exe
+C:\dev\19-1modern\lesson0514-ChatClient\lesson0514-Chat Client\obj\Debug\lesson0514-Chat Client.pdb

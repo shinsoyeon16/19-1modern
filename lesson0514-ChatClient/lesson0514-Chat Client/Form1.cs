@@ -70,12 +70,12 @@ namespace lesson0514_Chat_Client
             else
                 textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData;
         }
+
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
             serverStream = clientSocket.GetStream();
             byte[] outStream = System.Text.Encoding.ASCII.GetBytes("exit"+"$");
             serverStream.Write(outStream, 0, outStream.Length);
-            MessageBox.Show("닫기클릭 ");
         }
     }
 }
