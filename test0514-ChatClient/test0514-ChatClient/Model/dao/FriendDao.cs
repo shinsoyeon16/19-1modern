@@ -12,27 +12,8 @@ namespace test0514_ChatClient.Model.dao
     class FriendDao
     {
         MySqlConnection conn = new MySqlConnection("Server=localhost;Database=chat;Uid=root;Pwd=1234;");
-
-        private List<User> MatchingUser(List<string> friends)
-        {
-            List<User> list = new List<User>();
-            conn.Open();
-            //친구목록 리스트에 맞는 유저정보 가져오기
-            foreach (string friend_id in friends)
-            {
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM user where id = '" + friend_id + "'", conn);
-                MySqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    list.Add(new User(rdr[0].ToString(), rdr[1].ToString(), rdr[2].ToString(), rdr[3].ToString()));
-                }
-                rdr.Close();
-            }
-            conn.Close();
-            return list;
-        }
-
-        internal List<User> SelectAll(string id)
+        
+        internal List<string> SelectAll(string id)
         {
             List<string> friends = new List<string>();
             conn.Open();
@@ -47,10 +28,10 @@ namespace test0514_ChatClient.Model.dao
             }
             rdr.Close();
             conn.Close();
-            return MatchingUser(friends);
+            return friends;
         }
 
-        internal List<User> Received(string id)
+        internal List<string> Received(string id)
         {
             List<string> friends = new List<string>();
             conn.Open();
@@ -63,10 +44,10 @@ namespace test0514_ChatClient.Model.dao
             }
             rdr.Close();
             conn.Close();
-            return MatchingUser(friends);
+            return friends;
         }
 
-        internal List<User> Sent(string id)
+        internal List<string> Sent(string id)
         {
             List<string> friends = new List<string>();
             conn.Open();
@@ -79,7 +60,7 @@ namespace test0514_ChatClient.Model.dao
             }
             rdr.Close();
             conn.Close();
-            return MatchingUser(friends);
+            return friends;
         }
 
         internal void Request(string id, string friend_id)

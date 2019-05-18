@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,19 +23,18 @@ namespace test0514_ChatClient
         }
         private void Init()
         {
-            label1.Text = LoginInfo.login.name;
-            label2.Text =  LoginInfo.login.gender + " / " + LoginInfo.login.id;
-            if (LoginInfo.login.gender == "남자")
-            {
-                pictureBox1.Load(@"C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\img\default_man.jpg");
-            } else
-            {
-                pictureBox1.Load(@"C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\img\default_woman.jpg");
-            }
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-
+            // DTO 객체에 db정보 초기화
+            UserDto userDto = new UserDto();
             FriendDto dto = new FriendDto();
+            userDto.Load();
             dto.Load();
+
+            // 로그인된 유저의 정보를 폼에 띄우기
+            label1.Text = LoginInfo.login.name +"  ("+LoginInfo.login.id+")";
+            label2.Text =  LoginInfo.login.message;
+            MemoryStream ms = new MemoryStream(LoginInfo.login.image);
+            pictureBox1.Image = Image.FromStream(ms);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
             this.OnLoad(new EventArgs());
         }
@@ -59,6 +59,7 @@ namespace test0514_ChatClient
 
         private void button3_Click(object sender, EventArgs e) // 채팅
         {
+
         }
         private void button6_Click(object sender, EventArgs e) //전체유저 채팅
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,17 +22,18 @@ namespace test0514_ChatClient
         }
         private void Init()
         {
-            textBox1.Text = LoginInfo.login.name;
-            textBox4.Text = LoginInfo.login.name + " / " + LoginInfo.login.id;
+            // DTO 객체에 db정보 초기화
+            UserDto userDto = new UserDto();
+            FriendDto dto = new FriendDto();
+            userDto.Load();
+            dto.Load();
+
+            // 로그인된 유저의 정보를 폼에 띄우기
             textBox5.Text = LoginInfo.login.id;
-            if (LoginInfo.login.gender == "남자")
-            {
-                pictureBox1.Load(@"C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\img\default_man.jpg");
-            }
-            else
-            {
-                pictureBox1.Load(@"C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\img\default_woman.jpg");
-            }
+            textBox1.Text = LoginInfo.login.name;
+            textBox4.Text = LoginInfo.login.message;
+            MemoryStream ms = new MemoryStream(LoginInfo.login.image);
+            pictureBox1.Image = Image.FromStream(ms);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
@@ -40,7 +42,7 @@ namespace test0514_ChatClient
             //유효성 검사
             if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "")
             {
-                MessageBox.Show("모든 항목을 입력하세요."+textBox2.Text);
+                MessageBox.Show("모든 항목을 입력하세요.");
             }
             else if (textBox2.Text != textBox3.Text) // 비밀번호 확인을 잘못 입력한 경우
             {
@@ -62,6 +64,8 @@ namespace test0514_ChatClient
         private void button2_Click(object sender, EventArgs e) //사진 업로드 버튼
         {
             string filename = "";
+
+            // 사진파일 찾기 창 띄우기
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.InitialDirectory = @"C:\";
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -72,16 +76,24 @@ namespace test0514_ChatClient
             {
                 return;
             }
-            pictureBox1.Image = Bitmap.FromFile(filename);
-            textBox6.Text = filename;
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
-            
+            // 사용자가 선택한 사진 폼에 띄우기
+            pictureBox1.Image = Bitmap.FromFile(filename);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            textBox6.Text = filename;
+
+            //DB에 저장하는 과정
+            UserDto userDto = new UserDto();
+            userDto.UpdatePicture(filename);
+            MessageBox.Show("사진을 성공적으로 업로드했습니다.");
         }
 
-        private void button3_Click(object sender, EventArgs e) //사진 삭제 버튼
+        private void button3_Click(object sender, EventArgs e) // 기본이미지로 변경 버튼
         {
-            textBox6.Text = "기본 이미지";
+            UserDto userDto = new UserDto();
+            userDto.ResetPicture();
+            textBox6.Text = "";
+            Init();
         }
 
         private void button4_Click(object sender, EventArgs e) //닫기 버튼

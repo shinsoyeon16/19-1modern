@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace test0514_ChatClient
 {
     public partial class FriendDetailForm : Form
     {
+        FriendDto friendDto = new FriendDto();
         public FriendDetailForm()
         {
             InitializeComponent();
@@ -23,29 +25,30 @@ namespace test0514_ChatClient
         }
         private void Init()
         {
+            // DTO 객체에 db정보 초기화
+            UserDto userDto = new UserDto();
+            FriendDto dto = new FriendDto();
+            userDto.Load();
+            dto.Load();
+
             if (FriendDto.Friends.Find(x => x.id == LoginInfo.selectedUser.id)==null &&
                FriendDto.Received_Requests.Find(x => x.id == LoginInfo.selectedUser.id) ==null&&
                LoginInfo.login.id != LoginInfo.selectedUser.id)
             {
                 button1.Visible = true;
             }
-            label1.Text = LoginInfo.selectedUser.name;
-            label2.Text = LoginInfo.selectedUser.name + " / " + LoginInfo.selectedUser.id;
-            if (LoginInfo.selectedUser.gender == "남자")
-            {
-                pictureBox1.Load(@"C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\img\default_man.jpg");
-            }
-            else
-            {
-                pictureBox1.Load(@"C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\img\default_woman.jpg");
-            }
+            // 로그인된 유저의 정보를 폼에 띄우기
+            label1.Text = LoginInfo.selectedUser.name + "  (" + LoginInfo.selectedUser.id + ")";
+            label2.Text = LoginInfo.selectedUser.message;
+            MemoryStream ms = new MemoryStream(LoginInfo.selectedUser.image);
+            pictureBox1.Image = Image.FromStream(ms);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            this.OnLoad(new EventArgs());
         }
 
         private void button1_Click(object sender, EventArgs e) //친구요청 버튼
         {
-            FriendDto friendDto = new FriendDto();
-            friendDto.Load();
             if(FriendDto.Sent_Requests.Find(x => x.id == LoginInfo.selectedUser.id)!= null)
             {
                 MessageBox.Show("이미 보낸 친구입니다.");

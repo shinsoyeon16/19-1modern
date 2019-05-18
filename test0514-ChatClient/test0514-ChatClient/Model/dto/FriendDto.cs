@@ -16,11 +16,22 @@ namespace test0514_ChatClient.Model.dto
         FriendDao friendDao = new FriendDao();
         UserDao userDao = new UserDao();
 
+        private List<User> MatchingUser(List<string> friends)
+        {
+            List<User> list = new List<User>();
+            //친구목록 리스트에 맞는 유저정보 가져오기
+            foreach (string friend_id in friends)
+            {
+                list.Add(UserDto.Users.Find(x => x.id == friend_id));
+            }
+            return list;
+        }
+
         internal void Load()
         {
-            Friends = friendDao.SelectAll(LoginInfo.login.id);
-            Sent_Requests = friendDao.Sent(LoginInfo.login.id);
-            Received_Requests = friendDao.Received(LoginInfo.login.id);
+            Friends = MatchingUser(friendDao.SelectAll(LoginInfo.login.id));
+            Sent_Requests = MatchingUser(friendDao.Sent(LoginInfo.login.id));
+            Received_Requests = MatchingUser(friendDao.Received(LoginInfo.login.id));
         }
         internal void Request()
         {
