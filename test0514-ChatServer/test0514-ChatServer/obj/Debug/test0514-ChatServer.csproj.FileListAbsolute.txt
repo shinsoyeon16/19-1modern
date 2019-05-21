@@ -1,0 +1,7 @@
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\bin\Debug\test0514-ChatServer.exe.config
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\bin\Debug\test0514-ChatServer.exe
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\bin\Debug\test0514-ChatServer.pdb
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-ChatServer.csprojAssemblyReference.cache
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-ChatServer.csproj.CoreCompileInputs.cache
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-ChatServer.exe
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-ChatServer.pdb

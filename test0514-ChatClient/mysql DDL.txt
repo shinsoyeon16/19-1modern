@@ -1,0 +1,18 @@
+CREATE TABLE `friend` (
+  `id` varchar(20) NOT NULL,
+  `friend_id` varchar(20) NOT NULL,
+  `isResponsed` varchar(10) DEFAULT 'no',
+  PRIMARY KEY (`id`),
+  KEY `friend_id_idx` (`friend_id`),
+  CONSTRAINT `friend_id` FOREIGN KEY (`friend_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `id` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `user` (
+  `id` varchar(20) NOT NULL,
+  `password` varchar(20) DEFAULT NULL,
+  `name` varchar(10) DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `image` mediumblob,
+  `message` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

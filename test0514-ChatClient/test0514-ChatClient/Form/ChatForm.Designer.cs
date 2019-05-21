@@ -112,8 +112,9 @@
             this.label1.Font = new System.Drawing.Font("굴림", 15F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(166, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 20);
+            this.label1.Size = new System.Drawing.Size(63, 20);
             this.label1.TabIndex = 9;
+            this.label1.Text = "label1";
             // 
             // ChatForm
             // 
