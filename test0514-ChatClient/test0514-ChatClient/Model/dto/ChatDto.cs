@@ -18,13 +18,17 @@ namespace test0514_ChatClient.Model.dto
         public void Load()
         {
            ChatList = cdao.SelectChat();
+            foreach(Chat c in ChatList)
+            {
+                c.chat_users=cdao.SelectChatUsers(LoginInfo.login.id, c.chat_code);
+            }
             MyChatList = new List<Chat>();
             foreach(int a in cdao.SelectMyChat(LoginInfo.login.id))
             {
             MyChatList.Add(ChatList.Find(x => x.chat_code == a));
             }
         }
-        public List<string> ReadChatUser(int chat_code)
+        public List<string> ReadChatUser(int chat_code)//없애도될듯
         {
            List<string> list = cdao.SelectChatUser(chat_code);
             list.Remove(LoginInfo.login.id);

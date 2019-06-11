@@ -27,12 +27,12 @@ namespace test0514_ChatClient
         public ChatForm(TcpClient _clientSocket, int chat_code)
         {
             ////로그인 안된 상태면 창 종료
-            //if (LoginInfo.login == null) this.Close();
+            if (LoginInfo.login == null) this.Close();
 
             ////채팅방 세팅을 위해 데이터 불러오기
-            //clientSocket = _clientSocket;
-            //serverStream = clientSocket.GetStream();
-            //cdto.Load(); udto.Load();
+            clientSocket = _clientSocket;
+            serverStream = clientSocket.GetStream();
+            cdto.Load(); udto.Load();
             //chat = ChatDto.ChatList.Find(x => x.chat_code == chat_code);
             //List<string> chat_users = cdto.ReadChatUser(chat_code);
             //string chat_id = chat_users[0];
@@ -46,9 +46,8 @@ namespace test0514_ChatClient
             ////pictureBox1.Image = Image.FromStream(ms);
             ////pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             ///
-            
+
             readData = "[ sf님과 대화를 시작합니다. ]";
-            MessageBox.Show(Environment.NewLine + " >> " + readData);
             msg();
             //Thread ctThread = new Thread(getMessage);
             //ctThread.Start();
@@ -78,11 +77,12 @@ namespace test0514_ChatClient
             //        readData = "" + data[3];
             //    msg();
             //}
+           
         }
 
         private void msg()
         {
-            textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData;
+            textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData; 
             MessageBox.Show(textBox1.Text);
         }
     }

@@ -30,9 +30,9 @@ namespace test0514_ChatClient
             //트레이아이콘 설정
             notifyIcon1.Icon = new System.Drawing.Icon(Path.GetFullPath(@"..\..\img\chat.ico"));
             notifyIcon1.Text = "챼팅챼팅";
-            notifyIcon1.BalloonTipTitle = "제목인가";
-            notifyIcon1.BalloonTipText = "로그인되었습니당!!";
-            notifyIcon1.ShowBalloonTip(100);
+            notifyIcon1.BalloonTipTitle = "[로그인 성공]";
+            notifyIcon1.BalloonTipText = LoginInfo.login.name+"님 환영합니다.";
+            notifyIcon1.ShowBalloonTip(300);
             notifyIcon1.ContextMenuStrip.Items.Add("챼팅챼팅");
             notifyIcon1.ContextMenuStrip.Items.Add("도움말", null, Help_Clicked);
             notifyIcon1.ContextMenuStrip.Items.Add(new ToolStripSeparator());
@@ -83,7 +83,7 @@ namespace test0514_ChatClient
             ChatDto cdto = new ChatDto();
             cdto.Load();
             listBox3.DataSource = ChatDto.MyChatList;
-            listBox3.DisplayMember = "name\n" + "last_message\t"+"last_time";
+            listBox3.DisplayMember = "chat_users";
             listBox3.ValueMember = "chat_code";
         }
         private void button1_Click(object sender, EventArgs e) //프로필관리
@@ -102,6 +102,7 @@ namespace test0514_ChatClient
             ChatDto cdto = new ChatDto();
             int chat_code = cdto.StartChat(LoginInfo.login.id, LoginInfo.selectedUser.id);
             new ChatForm(clientSocket, chat_code).Show();
+            Init();
         }
         private void button6_Click(object sender, EventArgs e) //전체유저 채팅
        {
@@ -117,8 +118,7 @@ namespace test0514_ChatClient
         {
             //서버에 로그아웃정보 전달
             WriteToServer("logout$" + LoginInfo.login.id + "$");
-            notifyIcon1.Visible = false; 
-            LoginInfo.login = null;
+            notifyIcon1.Visible = false;
             this.Close();
         }
         

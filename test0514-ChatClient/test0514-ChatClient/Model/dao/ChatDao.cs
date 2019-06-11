@@ -32,7 +32,23 @@ namespace test0514_ChatClient.Model.dao
             conn.Close();
             return list;
         }
-        public List<int> SelectMyChat(string id)
+        public string SelectChatUsers(string login_id, int chat_code)
+        {
+            conn.Open();
+            MySqlCommand cmd;
+            MySqlDataReader rdr;
+            string result="";
+                cmd = new MySqlCommand("SELECT * from chat_users where chat_code='" + chat_code + "'", conn);
+                rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                if (rdr[1].ToString() != login_id) result = result+rdr[1].ToString();
+                }
+            rdr.Close();
+            conn.Close();
+            return result;
+        }
+            public List<int> SelectMyChat(string id)
         {
             List<int> list = new List<int>();
             conn.Open();
@@ -52,7 +68,7 @@ namespace test0514_ChatClient.Model.dao
             string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             MySqlCommand cmd = new MySqlCommand("INSERT INTO chat(last_message, last_time) VALUES('  ','"+ time +"')", conn);
             cmd.ExecuteNonQuery();
-            int chat_code = SelectChatCode(time);
+            int chat_code = SelectChatCode(time); //자동생성된 채팅방번호를 받아온다
 
             //채팅방의 pk를 사용하여 채팅유저목록 삽입
             InsertChatUser(chat_code, id); InsertChatUser(chat_code, chat_user);
