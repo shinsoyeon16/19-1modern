@@ -21,7 +21,7 @@ namespace test0514_ChatClient.Model.dto
         }
         private byte[] DefaultProfile(string gender)
         {
-            string defaultImg = @"C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\img\default_";
+            string defaultImg = @"..\..\img\default_";
             if (gender == "남자") defaultImg = defaultImg + "man.jpg";
             else defaultImg += "woman.jpg";
             byte[] ImageData;

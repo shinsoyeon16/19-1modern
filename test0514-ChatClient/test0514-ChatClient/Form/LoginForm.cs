@@ -37,16 +37,18 @@ namespace test0514_ChatClient
                 try
                 {
                     dbPassword = UserDto.Users.Find(x => x.id == id).password;
-                    if (dbPassword != password) MessageBox.Show("비밀번호가 다릅니다.");
-                    else
+                    
+                    if (dbPassword==password)//로그인성공인 경우
                     {
                         textBox1.Text = ""; textBox2.Text = "";
                         this.Visible = false;
                         dto.Login(id);
                         if (new IndexForm().ShowDialog() == DialogResult.Cancel) this.Visible = true;
                     }
+                    else if (dbPassword != password) MessageBox.Show("비밀번호가 다릅니다.");
+                    else MessageBox.Show("가입된 회원정보가 없습니다.");
                 }
-                catch { MessageBox.Show("가입된 회원정보가 없습니다."); }
+                catch { MessageBox.Show("프로그램 오류. 관리자에게 확인하세요."); }
             }
         }
 

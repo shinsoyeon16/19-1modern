@@ -12,29 +12,32 @@ namespace test0514_ChatServer
     class Program
     {
         public static Hashtable clientsList = new Hashtable();
-
+        public static int chat_index = 0;
         static void Main(string[] args)
         {
             TcpListener serverSocket = new TcpListener(8888);
-            TcpListener serverSocket_All = new TcpListener(8889);
             TcpClient clientSocket = default(TcpClient);
-            serverSocket.Start(); serverSocket_All.Start();
+            serverSocket.Start();
             Console.WriteLine("[ 채팅 프로그램 시작 ]");
             while ((true))
             {
-                clientSocket = serverSocket.AcceptTcpClient(); //소켓
+                // if (this.close()) break; //서버프로그램 종료기능
+                clientSocket = serverSocket.AcceptTcpClient(); //접속한클라이언트를 클라소켓에 대입
                 string[] data = ReadFromClient(clientSocket);
                 if (data[0] == "login")
                 {
                     //broadcast("[ " + data[0] + " Start Chatting ]", data[0], false);
-                    clientsList.Add(data[0], clientSocket);
 
+                    clientsList.Add(data[1], clientSocket);
 
                     Console.WriteLine("[ " + data[1] + " 유저 로그인 ]");
-                    handleClinet client = new handleClinet();
-                    client.startClient(clientSocket, data[1]);
+                    handleClient client = new handleClient();
+                    client.LogonClient(data[1], clientSocket);
                 }
             }
+            serverSocket.Stop();
+            Console.WriteLine("exit");
+            Console.ReadLine();
         }
         public static string[] ReadFromClient(TcpClient clientSocket)
         {
@@ -46,81 +49,64 @@ namespace test0514_ChatServer
             return data;
         }
 
-        public static void broadcast(string msg, string id, bool flag)
+        public static void Chatbroadcast(string msg, string id, int index)
         {
+          // List<string> chat_users = ChatList.Find(x => x.index == index).user;
             foreach (DictionaryEntry Item in clientsList)
             {
-                TcpClient broadcastSocket;
-                broadcastSocket = (TcpClient)Item.Value;
-                NetworkStream broadcastStream = broadcastSocket.GetStream();
-                Byte[] broadcastBytes = null;
-
-                if (flag == true && id != Item.Key.ToString())
+                //if (chat_users.Contains(Item.Value))
+                //{
+                    TcpClient broadcastSocket;
+                    broadcastSocket = (TcpClient)Item.Value;
+                    NetworkStream broadcastStream = broadcastSocket.GetStream();
+                    Byte[] broadcastBytes = null;
+                if ( id != Item.Key.ToString())
                     broadcastBytes = Encoding.ASCII.GetBytes(id + " : " + msg);
                 else
                     broadcastBytes = Encoding.ASCII.GetBytes(msg);
                 broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
                 broadcastStream.Flush();
+               // }
             }
         }  //end broadcast function
-    }//end Main class
 
 
-    public class handleClinet
-    {
-        TcpClient clientSocket;
-        string id;
-
-        public void startClient(TcpClient inClientSocket, string id)
+        public class handleClient
         {
-            this.clientSocket = inClientSocket;
-            this.id = id;
-            NetworkStream networkStream = clientSocket.GetStream();
-            networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
-            dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
-            string[] data = dataFromClient.Split('$');
-            if (data[0] == "login")
+            TcpClient clientSocket;
+            string id;
+            public void LogonClient(string id, TcpClient inClientSocket)
             {
-                Thread ctThread = new Thread(doChat);
-            ctThread.Start();
-        }
-        public void stopClient()
-        {
-            Program.clientsList.Remove(this.id);
-            Console.WriteLine("[ " + this.id + " 유저 채팅 종료 ]");
-            Program.broadcast("[ " + this.id + " Disconnected]", this.id , false);
-            clientSocket.Close();
-        }
-        private void doChat()
-        {
-            byte[] bytesFrom = new byte[(int)clientSocket.ReceiveBufferSize];
-            string dataFromClient = null;
-            Byte[] sendBytes = null;
-            string serverResponse = null;
-
-            while ((true))
+                this.id = id;
+                this.clientSocket = inClientSocket;
+                Thread state = new Thread(State);
+                state.Start();
+            }
+            private void State()
             {
-                try
+                while (true)
                 {
-                    NetworkStream networkStream = clientSocket.GetStream();
-                    networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
-                    dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
-                    string[] data = dataFromClient.Split('$'); //data[0]은 보낸아이디, data[1]은 데이터
-                    if (data[1] != "exit")
+                    string[] data = ReadFromClient(clientSocket);
+                    if (data[0] == "chat")
                     {
-                        Console.WriteLine("- " + id + " : " + data[1]);
-                        Program.broadcast(data[1], data[0], true);
+                        Console.WriteLine("-- " + data[2] + "번 채팅방 >> " + id + " : " + data[3]);
+                        Chatbroadcast(data[3], data[1], int.Parse(data[2]));
                     }
-                    else break;
+                    //if()이미 목록에있는지없는지 확인
+                    else if (data[0] == "logout")
+                    {
+                        LogoutClient();
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-            }//end while
-            stopClient();
-        }//end doChat
-    } //end class handleClinet
+            }
+            public void LogoutClient()
+            {
+                clientsList.Remove(this.id);
+                Console.WriteLine("[ " + this.id + " 유저 채팅 종료 ]");
+                clientSocket.Close();
+            }
+        } //end class handleClinet
+    }
 }//end 넴스페슈
 
 

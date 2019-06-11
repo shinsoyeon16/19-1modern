@@ -11,40 +11,47 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using test0514_ChatClient.Model.dto;
+using test0514_ChatClient.Model.vo;
 
 namespace test0514_ChatClient
 {
-    //1. 일대일 채팅만들기 2. 일대다 채팅  3. 전체체팅 연결
     public partial class ChatForm : Form
-    {
-        string readData = null;
+    { //일대일 채팅 기능만듥릴
+        string readData = "";
+        public static TcpClient clientSocket = new TcpClient();
+        public static NetworkStream serverStream = default(NetworkStream);
+        Chat chat = new Chat();
+        ChatDto cdto = new ChatDto();
+        UserDto udto = new UserDto();
 
-        public ChatForm()
+        public ChatForm(TcpClient _clientSocket, int chat_code)
         {
-            InitializeComponent();
+            ////로그인 안된 상태면 창 종료
+            //if (LoginInfo.login == null) this.Close();
 
-            //로그인 안된 상태면 창 종료
-            if (LoginInfo.login == null) this.Close();
+            ////채팅방 세팅을 위해 데이터 불러오기
+            //clientSocket = _clientSocket;
+            //serverStream = clientSocket.GetStream();
+            //cdto.Load(); udto.Load();
+            //chat = ChatDto.ChatList.Find(x => x.chat_code == chat_code);
+            //List<string> chat_users = cdto.ReadChatUser(chat_code);
+            //string chat_id = chat_users[0];
+            //User user = UserDto.Users.Find(x => x.id == chat_id);
 
-            // 채팅할 상대유저의 정보를 폼에 띄우기
-            label1.Text = LoginInfo.selectedUser.name + "  (" + LoginInfo.selectedUser.id + ")";
-            label2.Text = LoginInfo.selectedUser.message;
-            MemoryStream ms = new MemoryStream(LoginInfo.selectedUser.image);
-            pictureBox1.Image = Image.FromStream(ms);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
-            //서버 접속 - 서버에 로그인아이디와 채팅아이디를 보냄
-            this.FormClosing += Form_Closing;
+            //// 채팅할 상대유저의 정보를 폼에 띄우기
+            ////label1.Text = user.name + "  (" + user.id + ")";
+            ////label2.Text = user.message;
+            ////MemoryStream ms = new MemoryStream(user.image);
+            ////pictureBox1.Image = Image.FromStream(ms);
+            ////pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            ///
             
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(LoginInfo.login.id + "$"+LoginInfo.selectedUser.id+"$");
-            serverStream = clientSocket.GetStream();
-            serverStream.Write(outStream, 0, outStream.Length);
-            readData = "[ Hello " + LoginInfo.login.id + ", You Can Start Chatting Now ]";
+            readData = "[ sf님과 대화를 시작합니다. ]";
+            MessageBox.Show(Environment.NewLine + " >> " + readData);
             msg();
-
-
-            Thread ctThread = new Thread(getMessage);
-            ctThread.Start();
+            //Thread ctThread = new Thread(getMessage);
+            //ctThread.Start();
         }
         void TextBox1_ScrollEvent(object sender, EventArgs e)
         {
@@ -53,42 +60,31 @@ namespace test0514_ChatClient
         }
         private void button1_Click(object sender, EventArgs e) //메세지 전송버튼
         {
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(LoginInfo.login.id + "$" + textBox2.Text + "$");
-            serverStream.Write(outStream, 0, outStream.Length);
-            serverStream.Flush();
-            textBox2.Text = "";
+            //byte[] outStream = System.Text.Encoding.ASCII.GetBytes("chat$" + LoginInfo.login.id + "$" + chat.index + "$" + textBox2.Text + "$");
+            //serverStream.Write(outStream, 0, outStream.Length);
+            //serverStream.Flush();
+            //textBox2.Text = "";
         }
 
         private void getMessage()
         {
-            while (true)
-            {
-                int buffSize = 0;
-                byte[] inStream = new byte[(int)clientSocket.ReceiveBufferSize];
-                buffSize = clientSocket.ReceiveBufferSize;
-                serverStream.Read(inStream, 0, buffSize);
-                string returndata = System.Text.Encoding.ASCII.GetString(inStream);
-                readData = "" + returndata;
-                msg();
-            }
+            //while (true)
+            //{
+            //    byte[] inStream = new byte[(int)clientSocket.ReceiveBufferSize];
+            //    serverStream.Read(inStream, 0, clientSocket.ReceiveBufferSize);
+            //    string returndata = System.Text.Encoding.ASCII.GetString(inStream);
+            //    string[] data = returndata.Split('$');
+            //    if (data[0] == "chat" && int.Parse(data[2]) == chat.index)
+            //        readData = "" + data[3];
+            //    msg();
+            //}
         }
 
         private void msg()
         {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(msg));
-            else
-                textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData;
+            textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData;
+            MessageBox.Show(textBox1.Text);
         }
-
-        private void Form_Closing(object sender, FormClosingEventArgs e)
-        {
-            serverStream = clientSocket.GetStream();
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(LoginInfo.login.id + "$" + "exit" + "$");
-            serverStream.Write(outStream, 0, outStream.Length);
-        }
-
-
     }
 }
 

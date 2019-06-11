@@ -53,10 +53,10 @@
             this.textBox1.Location = new System.Drawing.Point(5, 140);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(478, 403);
             this.textBox1.TabIndex = 3;
+            this.textBox1.Text = "채팅프로그램 시작";
             this.textBox1.WordWrap = false;
             this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_ScrollEvent);
             // 
