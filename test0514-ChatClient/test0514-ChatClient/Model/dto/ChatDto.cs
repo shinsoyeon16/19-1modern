@@ -26,7 +26,7 @@ namespace test0514_ChatClient.Model.dto
             foreach (int a in cdao.SelectMyChat(LoginInfo.login.id))
             {
                 MyChatList.Add(ChatList.Find(x => x.chat_code == a));
-                MyChatList.Find(x => x.chat_code == a).chat_display = MyChatList.Find(x => x.chat_code == a).name + " / " + MyChatList.Find(x => x.chat_code == a).chat_users + " / " + MyChatList.Find(x => x.chat_code == a).last_message + " (" + MyChatList.Find(x => x.chat_code == a).last_time + ")";
+                MyChatList.Find(x => x.chat_code == a).chat_display = MyChatList.Find(x => x.chat_code == a).chat_users + " / " + MyChatList.Find(x => x.chat_code == a).last_message + " (" + MyChatList.Find(x => x.chat_code == a).last_time + ")";
             }
         }
         public int StartChat(string id, string chat_user)

@@ -51,7 +51,6 @@ namespace test0514_ChatClient
             timer.Interval = 1000;
             timer.Tick += new EventHandler(KeepChatList);
             timer.Start();
-            //  this.OnLoad(new EventArgs());
 
 
             //트레이아이콘 설정    안되면 윈도우 설정 시스템 알림켜기 
@@ -90,20 +89,7 @@ namespace test0514_ChatClient
             serverStream.Flush();
         }
 
-        public void ListBoxBinding(object sender, EventArgs e)
-        {
-            //listBox1.DataSource = FriendDto.Online_Friends;
-            //listBox1.DisplayMember = "name";
-            //listBox1.ValueMember = "id";
-            //listBox2.DataSource = FriendDto.Offline_Friends;
-            //listBox2.DisplayMember = "name";
-            //listBox2.ValueMember = "id";
-            //cdto.Load();
-            //listBox3.DataSource = ChatDto.MyChatList;
-            //listBox3.DisplayMember = "chat_display";
-            //listBox3.ValueMember = "chat_users";
-        }
-            private void button1_Click(object sender, EventArgs e) //프로필관리
+        private void button1_Click(object sender, EventArgs e) //프로필관리
         {
             if (new MyProfileForm().ShowDialog() == DialogResult.Cancel) Init();
         }
@@ -147,11 +133,6 @@ namespace test0514_ChatClient
                 MessageBox.Show("먼저 채팅할 친구를 선택해주세요.");
             }
         }
-        private void button6_Click(object sender, EventArgs e) //전체유저 채팅
-        {
-            //WriteToServer("chatStart$" + LoginInfo.login.id + "$0$");
-            //// new ChatForm().Show();
-        }
 
         private void button2_Click(object sender, EventArgs e) //새로고침
         {
@@ -184,7 +165,8 @@ namespace test0514_ChatClient
                 int chat_code = -1;
                 if (ChatDto.MyChatList.Exists(x => x.chat_users == UserDto.Users.Find(a => a.id == listBox3.SelectedValue.ToString()).id))
                 {
-                    chat_code = ChatDto.MyChatList.Find(x => x.chat_users == UserDto.Users.Find(a => a.id == listBox3.SelectedValue.ToString()).id).chat_code;
+                    chat_code = ChatDto.MyChatList.Find(x => x.chat_users == UserDto.Users.Find(a => a.id ==
+                    listBox3.SelectedValue.ToString()).id).chat_code;
                 }
                 foreach (Form f in Application.OpenForms)
                 {

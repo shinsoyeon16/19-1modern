@@ -16,3 +16,6 @@ C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\obj\Debug\test0514-Cha
 C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\obj\Debug\test0514-ChatClient.csproj.CopyComplete
 C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\obj\Debug\test0514-ChatClient.exe
 C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\obj\Debug\test0514-ChatClient.pdb
+C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\bin\Debug\MySql.Data.dll
+C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\bin\Debug\Google.Protobuf.dll
+C:\dev\19-1modern\test0514-ChatClient\test0514-ChatClient\bin\Debug\MySql.Data.xml
