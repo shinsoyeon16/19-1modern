@@ -23,24 +23,19 @@ namespace test0514_ChatClient.Model.dto
                 c.chat_users=cdao.SelectChatUsers(LoginInfo.login.id, c.chat_code);
             }
             MyChatList = new List<Chat>();
-            foreach(int a in cdao.SelectMyChat(LoginInfo.login.id))
+            foreach (int a in cdao.SelectMyChat(LoginInfo.login.id))
             {
-            MyChatList.Add(ChatList.Find(x => x.chat_code == a));
+                MyChatList.Add(ChatList.Find(x => x.chat_code == a));
+                MyChatList.Find(x => x.chat_code == a).chat_display = MyChatList.Find(x => x.chat_code == a).name + " / " + MyChatList.Find(x => x.chat_code == a).chat_users + " / " + MyChatList.Find(x => x.chat_code == a).last_message + " (" + MyChatList.Find(x => x.chat_code == a).last_time + ")";
             }
-        }
-        public List<string> ReadChatUser(int chat_code)//없애도될듯
-        {
-           List<string> list = cdao.SelectChatUser(chat_code);
-            list.Remove(LoginInfo.login.id);
-            return list;
         }
         public int StartChat(string id, string chat_user)
         {
             return cdao.CreateChat(id, chat_user);
         }
-        public void SaveMessage()
+        public List<vo.Message> ReadMessage(int chat_code)
         {
-
+            return cdao.SelectMessages(chat_code);
         }
     }
 }

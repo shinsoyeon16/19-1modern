@@ -37,22 +37,22 @@ namespace test0514_ChatClient.Model.dao
             conn.Open();
             MySqlCommand cmd;
             MySqlDataReader rdr;
-            string result="";
-                cmd = new MySqlCommand("SELECT * from chat_users where chat_code='" + chat_code + "'", conn);
-                rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                if (rdr[1].ToString() != login_id) result = result+rdr[1].ToString();
-                }
+            string result = "";
+            cmd = new MySqlCommand("SELECT * from chat_users where chat_code='" + chat_code + "'", conn);
+            rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                if (rdr[1].ToString() != login_id) result = result + rdr[1].ToString();
+            }
             rdr.Close();
             conn.Close();
             return result;
         }
-            public List<int> SelectMyChat(string id)
+        public List<int> SelectMyChat(string id)
         {
             List<int> list = new List<int>();
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("SELECT chat_code from chat_users where id = '"+id+"'", conn);
+            MySqlCommand cmd = new MySqlCommand("SELECT chat_code from chat_users where id = '" + id + "'", conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
             while (rdr.Read())
             {
@@ -66,7 +66,7 @@ namespace test0514_ChatClient.Model.dao
         {
             conn.Open();
             string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO chat(last_message, last_time) VALUES('  ','"+ time +"')", conn);
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO chat(last_message, last_time) VALUES('  ','" + time + "')", conn);
             cmd.ExecuteNonQuery();
             int chat_code = SelectChatCode(time); //자동생성된 채팅방번호를 받아온다
 
@@ -84,16 +84,17 @@ namespace test0514_ChatClient.Model.dao
             rdr.Close();
             return result;
         }
-        public void InsertChatUser(int chat_code, string id) {
-            
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO chat_users (chat_code, id) VALUES('"+chat_code+"','" + id+ "')", conn);
+        public void InsertChatUser(int chat_code, string id)
+        {
+
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO chat_users (chat_code, id) VALUES('" + chat_code + "','" + id + "')", conn);
             cmd.ExecuteNonQuery();
         }
         public List<string> SelectChatUser(int chat_code)
         {
             List<string> list = new List<string>();
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("SELECT id from chat_users where chat_code = '"+chat_code+"'", conn);
+            MySqlCommand cmd = new MySqlCommand("SELECT id from chat_users where chat_code = '" + chat_code + "'", conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
             while (rdr.Read())
             {
@@ -103,5 +104,23 @@ namespace test0514_ChatClient.Model.dao
             conn.Close();
             return list;
         }
+        public List<vo.Message> SelectMessages(int chat_code)
+        {
+            List<vo.Message> list = new List<vo.Message>();
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("SELECT * from message where chat_code='"+chat_code+"'", conn);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                vo.Message message = new vo.Message();
+                message.id = rdr[1].ToString();
+                message.time = DateTime.Parse( rdr[2].ToString());
+                message.message = rdr[3].ToString();
+                list.Add(message);
+            }
+            rdr.Close();
+            conn.Close();
+            return list;
         }
+    }
 }

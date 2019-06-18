@@ -1,35 +1,54 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace test0514_ChatServer
+namespace test0514_ChatServer 
 {
     class Program
     {
         public static Hashtable clientsList = new Hashtable();
         public static int chat_index = 0;
+        static Dao dao = new Dao();
+
         static void Main(string[] args)
         {
             TcpListener serverSocket = new TcpListener(8888);
             TcpClient clientSocket = default(TcpClient);
             serverSocket.Start();
-            Console.WriteLine("[ 채팅 프로그램 시작 ]");
+            Console.WriteLine("[ 채팅 서버 프로그램 시작 ]");
             while ((true))
             {
-                Console.WriteLine("다시 와일문돈당");
                 // if (this.close()) break; //서버프로그램 종료기능
                 clientSocket = serverSocket.AcceptTcpClient(); //접속한클라이언트를 클라소켓에 대입
-                Console.WriteLine("다시 소켓받는당");
                 string[] data = ReadFromClient(clientSocket);
                 if (data[0] == "login")
                 {
-                    //broadcast("[ " + data[0] + " Start Chatting ]", data[0], false);
-
-                    clientsList.Add(data[1], clientSocket);
+                    try
+                    {
+                        clientsList.Add(data[1], clientSocket);
+                        NetworkStream networkStream = clientSocket.GetStream();
+                        Byte[] BytesData = null;
+                        BytesData = Encoding.UTF8.GetBytes("Success$");
+                        networkStream.Write(BytesData, 0, BytesData.Length);
+                        networkStream.Flush();
+                    }
+                    catch
+                    {
+                        Console.WriteLine(data[1]+"유저 중복 로그인 시도");
+                        NetworkStream networkStream = clientSocket.GetStream();
+                        Byte[] BytesData = null;
+                        BytesData = Encoding.UTF8.GetBytes("Not Allowed Access$");
+                        networkStream.Write(BytesData, 0, BytesData.Length);
+                        networkStream.Flush();
+                        continue;
+                    }
 
                     Console.WriteLine("[ " + data[1] + " 유저 로그인 ]");
+                    OnlineUsers();
                     handleLogin client = new handleLogin();
                     client.Login(data[1], clientSocket);
                 }
@@ -44,33 +63,50 @@ namespace test0514_ChatServer
             NetworkStream networkStream = clientSocket.GetStream();
             byte[] bytesFrom = new byte[(int)clientSocket.ReceiveBufferSize];
             networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
-            string dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
+            string dataFromClient = System.Text.Encoding.UTF8.GetString(bytesFrom);
             string[] data = dataFromClient.Split('$');
             return data;
         }
-
-        public static void Chatbroadcast(string msg, string id, int index)
+        public static void OnlineUsers()
         {
-            // List<string> chat_users = ChatList.Find(x => x.index == index).user;
+            string online_users = "OnlineUsers$";
             foreach (DictionaryEntry Item in clientsList)
             {
-                //if (chat_users.Contains(Item.Value))
-                //{
+                online_users = online_users + Item.Key + "$";
+            }
+
+            foreach (DictionaryEntry Item in clientsList)
+            {
                 TcpClient broadcastSocket;
                 broadcastSocket = (TcpClient)Item.Value;
                 NetworkStream broadcastStream = broadcastSocket.GetStream();
                 Byte[] broadcastBytes = null;
-                if (id != Item.Key.ToString())
-                    broadcastBytes = Encoding.ASCII.GetBytes(id + " : " + msg);
-                else
-                    broadcastBytes = Encoding.ASCII.GetBytes(msg);
+                broadcastBytes = Encoding.UTF8.GetBytes(online_users);
+                broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
                 broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
                 broadcastStream.Flush();
-                // }
+            }
+        }  //end OnlineUsers function
+
+        public static void Chatbroadcast(string[] data)
+        {
+            List<string> chat_users = dao.LoadChatUsers(data);
+            foreach (DictionaryEntry Item in clientsList)
+            {
+                if (chat_users.Contains(Item.Key.ToString()))
+                {
+                    TcpClient broadcastSocket;
+                    broadcastSocket = (TcpClient)Item.Value;
+                    NetworkStream broadcastStream = broadcastSocket.GetStream();
+                    Byte[] broadcastBytes = null;
+                    broadcastBytes = Encoding.UTF8.GetBytes("chat$" +  data[2]+ "$");
+                    broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                    broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                    broadcastStream.Flush();
+                }
             }
         }  //end broadcast function
-
-
+        
         public class handleLogin
         {
             TcpClient clientSocket;
@@ -80,62 +116,33 @@ namespace test0514_ChatServer
             {
                 this.id = id;
                 this.clientSocket = inClientSocket;
+                Thread t = new Thread(State);
+                t.Start();
+            }
+            public void State()
+            {
                 while (isRun)
                 {
                     string[] data = ReadFromClient(clientSocket);
                     if (data[0] == "chat")
                     {
                         Console.WriteLine("-- " + data[2] + "번 채팅방 >> " + id + " : " + data[3]);
-                        Chatbroadcast(data[3], data[1], int.Parse(data[2]));
+                        dao.SaveMessage(data);
+                        Chatbroadcast(data);
                     }
                     //if()이미 목록에있는지없는지 확인
                     else if (data[0] == "logout")
                     {
-                        Logout();
+                        isRun = false;
+                        clientsList.Remove(this.id);
+                        clientSocket.Close();
+                        Console.WriteLine("[ " + this.id + " 유저 로그아웃 ]");
+                        OnlineUsers();
                     }
                 }
-               // handleChat state = new handleChat();
-                //state.Run();
-            }
-
-            public void Logout()
-            {
-                isRun = false;
-                clientsList.Remove(this.id);
-                Console.WriteLine("[ " + this.id + " 유저 채팅 종료 ]");
             }
         } //end class handleClinet
-    }
-    
-
-    //public class handleChat
-    //{
-    //        TcpClient clientSocket;
-    //        string id;
-    //        private Boolean isRun = true;
-    //    public void SetState(Boolean state)
-    //    {
-    //        this.isRun = state;
-    //    }
-    //    private void State()
-    //    {
-            
-    //    }
-    //    public void Run()
-    //    {
-    //        while (isRun)
-    //        {
-    //            try
-    //            {
-    //                State();
-    //                Thread.Sleep(100);
-    //            }
-    //            catch (Exception e) { }
-    //        }
-    //        Console.WriteLine("스레드 종료");
-    //    }
-    //}
-    //    }
+    }// end class program
 }//end 넴스페슈
 
 
@@ -170,7 +177,7 @@ namespace test0514_ChatServer
                 Console.WriteLine("[ "+idFromClient + " 유저 채팅 시작 ]");
                 handleClinet client = new handleClinet();
                 client.startClient(clientSocket, idFromClient);
-            }
+            }s
         }
 
         public static void broadcast(string msg, string id, bool flag)

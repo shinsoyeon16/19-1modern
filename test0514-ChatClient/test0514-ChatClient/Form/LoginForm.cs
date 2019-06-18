@@ -34,31 +34,50 @@ namespace test0514_ChatClient
                 UserDto dto = new UserDto();
                 string dbPassword;
                 dto.Load(); //나중에 userdto 생성자만들어서 그안에 넣기
-                MessageBox.Show("로그인시도중.");
-                try
+                if (UserDto.Users.Exists(x => x.id == id))
                 {
                     dbPassword = UserDto.Users.Find(x => x.id == id).password;
-                    
-                    if (dbPassword==password)//로그인성공인 경우
+                    if (dbPassword == password)//로그인성공인 경우
                     {
-                        textBox1.Text = ""; textBox2.Text = "";
+                        if (checkBox1.Checked)
+                        {
+                            LoginInfo.saveId = textBox1.Text;
+                        }
+                        else LoginInfo.saveId = "";
+                        if (checkBox2.Checked)
+                        {
+                            LoginInfo.savePw = textBox2.Text;
+                        }
+                        else LoginInfo.savePw = "";
+                        textBox1.Text = LoginInfo.saveId; textBox2.Text = LoginInfo.savePw;
                         this.Visible = false;
                         dto.Login(id);
-                        MessageBox.Show("로그인성공임."+ LoginInfo.login.id);
-                        if (new IndexForm().ShowDialog() == DialogResult.Cancel) { this.Visible = true; LoginInfo.login = null; this.Refresh(); MessageBox.Show("창닫았네?"+LoginInfo.login.id); }
+                        try
+                        {
+                            if (new IndexForm().ShowDialog() == DialogResult.Cancel) {this.Visible = true; }
+                        }
+                        catch (Exception err)
+                        {
+                            MessageBox.Show("접속불가! 서버 관리자에게 문의하세요. \n오류 : " + err);
+                        }
                     }
                     else if (dbPassword != password) MessageBox.Show("비밀번호가 다릅니다.");
-                    else MessageBox.Show("가입된 회원정보가 없습니다.");
                 }
-                catch {
-                    MessageBox.Show("로그인 실패. 서버 관리자에게 확인하세요.");
-                }
+                else MessageBox.Show("가입된 회원정보가 없습니다.");
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             new JoinForm().ShowDialog();
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked == true)
+            {
+                checkBox1.Checked = true;
+            }
         }
     }
 }

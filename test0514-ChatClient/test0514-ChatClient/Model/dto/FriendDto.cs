@@ -13,6 +13,8 @@ namespace test0514_ChatClient.Model.dto
         public static List<User> Friends;
         public static List<User> Sent_Requests; //받은 친구요청
         public static List<User> Received_Requests; //보낸 친구요청
+        public static List<User> Online_Friends;
+        public static List<User> Offline_Friends;
         FriendDao friendDao = new FriendDao();
         UserDao userDao = new UserDao();
 

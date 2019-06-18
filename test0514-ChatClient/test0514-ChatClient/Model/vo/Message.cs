@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace test0514_ChatClient.Model.vo
 {
     public class Message
-    {
+    {  
         private string message_;
 
         public string message

@@ -13,6 +13,13 @@ namespace test0514_ChatClient.Model.vo
         private string last_message_;
         private DateTime last_time_;
         private string chat_users_="";
+        private string chat_display_;
+
+        public string chat_display
+        {
+            get { return chat_display_; }
+            set { chat_display_ = value; }
+        }
 
         public string chat_users
         {

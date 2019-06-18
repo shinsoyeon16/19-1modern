@@ -5,3 +5,7 @@ C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-Cha
 C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-ChatServer.csproj.CoreCompileInputs.cache
 C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-ChatServer.exe
 C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-ChatServer.pdb
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\bin\Debug\MySql.Data.dll
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\bin\Debug\Google.Protobuf.dll
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\bin\Debug\MySql.Data.xml
+C:\dev\19-1modern\test0514-ChatServer\test0514-ChatServer\obj\Debug\test0514-ChatServer.csproj.CopyComplete

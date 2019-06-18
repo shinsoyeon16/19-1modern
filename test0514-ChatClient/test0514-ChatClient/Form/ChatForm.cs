@@ -16,41 +16,42 @@ using test0514_ChatClient.Model.vo;
 namespace test0514_ChatClient
 {
     public partial class ChatForm : Form
-    { //일대일 채팅 기능만듥릴
-        string readData = "";
-        public static TcpClient clientSocket = new TcpClient();
-        public static NetworkStream serverStream = default(NetworkStream);
+    { 
+        List<Model.vo.Message> chatLog = new List<Model.vo.Message>();
+        public static TcpClient clientSocket;
+        public static NetworkStream serverStream;
         Chat chat = new Chat();
+        User chat_user = new User();
         ChatDto cdto = new ChatDto();
         UserDto udto = new UserDto();
-
+        Thread ctThread;
         public ChatForm(TcpClient _clientSocket, int chat_code)
         {
-            ////로그인 안된 상태면 창 종료
-            if (LoginInfo.login == null) this.Close();
+            InitializeComponent(); //  InitailizeComponent 메서드에서 폼 속성 및 자식 컨트롤 배치 등의 작업을 수행하기 때문입니다. okok
 
-            ////채팅방 세팅을 위해 데이터 불러오기
+            //로그인 안된 상태면 창 종료
+            if (LoginInfo.login == null) this.Close();
             clientSocket = _clientSocket;
+
+            //채팅방 세팅을 위해 데이터 불러오기
             serverStream = clientSocket.GetStream();
             cdto.Load(); udto.Load();
-            //chat = ChatDto.ChatList.Find(x => x.chat_code == chat_code);
-            //List<string> chat_users = cdto.ReadChatUser(chat_code);
-            //string chat_id = chat_users[0];
-            //User user = UserDto.Users.Find(x => x.id == chat_id);
-
-
-            //// 채팅할 상대유저의 정보를 폼에 띄우기
-            ////label1.Text = user.name + "  (" + user.id + ")";
-            ////label2.Text = user.message;
-            ////MemoryStream ms = new MemoryStream(user.image);
-            ////pictureBox1.Image = Image.FromStream(ms);
-            ////pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            ///
-
-            readData = "[ sf님과 대화를 시작합니다. ]";
+            chat = ChatDto.ChatList.Find(x => x.chat_code == chat_code);
+            chatLog = cdto.ReadMessage(chat.chat_code);
+            chat_user = UserDto.Users.Find(x => x.id == chat.chat_users);
+            Init();
+            ctThread = new Thread(getMessage);
+            ctThread.Start();
+        }
+        void Init()
+        {
+            // 채팅할 상대유저의 정보를 폼에 띄우기
+            label1.Text = chat_user.name + "  (" + chat_user.id + ")";
+            label2.Text = chat_user.message;
+            MemoryStream ms = new MemoryStream(chat_user.image);
+            pictureBox1.Image = Image.FromStream(ms);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             msg();
-            //Thread ctThread = new Thread(getMessage);
-            //ctThread.Start();
         }
         void TextBox1_ScrollEvent(object sender, EventArgs e)
         {
@@ -59,31 +60,58 @@ namespace test0514_ChatClient
         }
         private void button1_Click(object sender, EventArgs e) //메세지 전송버튼
         {
-            //byte[] outStream = System.Text.Encoding.ASCII.GetBytes("chat$" + LoginInfo.login.id + "$" + chat.index + "$" + textBox2.Text + "$");
-            //serverStream.Write(outStream, 0, outStream.Length);
-            //serverStream.Flush();
-            //textBox2.Text = "";
+            textBox2.Text = textBox2.Text.Trim('\r');
+            textBox2.Text = textBox2.Text.Trim('\n');
+            if (textBox2.Text != "" && textBox2.Text != " ")
+            {
+                byte[] outStream = System.Text.Encoding.UTF8.GetBytes("chat$" + LoginInfo.login.id + "$" + chat.chat_code + "$" + textBox2.Text + "$");
+                serverStream.Write(outStream, 0, outStream.Length);
+                serverStream.Flush();
+            }
+            textBox2.Text = null;
         }
 
         private void getMessage()
         {
-            //while (true)
-            //{
-            //    byte[] inStream = new byte[(int)clientSocket.ReceiveBufferSize];
-            //    serverStream.Read(inStream, 0, clientSocket.ReceiveBufferSize);
-            //    string returndata = System.Text.Encoding.ASCII.GetString(inStream);
-            //    string[] data = returndata.Split('$');
-            //    if (data[0] == "chat" && int.Parse(data[2]) == chat.index)
-            //        readData = "" + data[3];
-            //    msg();
-            //}
-           
+            while (true)
+            {
+                byte[] inStream = new byte[(int)clientSocket.ReceiveBufferSize];
+                serverStream.Read(inStream, 0, clientSocket.ReceiveBufferSize);
+                string returndata = System.Text.Encoding.UTF8.GetString(inStream);
+                string[] data = returndata.Split('$');
+                if (data[0] == "chat" && int.Parse(data[1]) == chat.chat_code)
+                {
+                    chatLog = cdto.ReadMessage(chat.chat_code);
+                }
+                msg();
+            }
         }
 
         private void msg()
         {
-            textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData; 
-            MessageBox.Show(textBox1.Text);
+            string log = "";
+            foreach (var a in chatLog)
+            {
+                if (LoginInfo.login.id == a.id)
+                    log = log + Environment.NewLine + "나 : " + a.message + " (" + a.time.ToString("yyyy-MM-dd HH:mm:ss") + ")";
+                else
+                    log = log + Environment.NewLine + UserDto.Users.Find(x => x.id == a.id).name + " : " + a.message + " (" + a.time.ToString("yyyy-MM-dd HH:mm:ss") + ")";
+            }
+            textBox1.Text = log;
+        }
+
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                button1_Click(sender, e);
+            }
+        }
+
+        private void ChatForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ctThread.Abort();
         }
     }
 }
